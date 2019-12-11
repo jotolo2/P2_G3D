@@ -24,10 +24,10 @@ struct Light {
     float quadratic;
 };
 
-Light lights[] = {
+Light lights[] = Light[](
 			Light(vec3(1.0, 1.0, 1.0), vec3(10, 0, 0), 1, 0.09, 0.032),
-			Light(vec3(0.0, 1.0, 0.0), vec3(-2, 0, 0), 1, 0.09, 0.032),
-			};
+			Light(vec3(0.0, 1.0, 0.0), vec3(-2, 0, 0), 1, 0.09, 0.032))
+			;
 
 
 //Propeidades de la fuente de luz focal
@@ -44,7 +44,7 @@ struct SpotLight {
 	float cutoff;
 };
 
-SpotLight spotLight = SpotLight(vec3(1.0), vec3(0.0, 0.0, -1.0), vec3(0, 0, 1),  1, 0, 0, 0.2);
+SpotLight spotLight = SpotLight(vec3(1.0), vec3(0.0, 0.0, -5.0), vec3(0, 0, 1),  1, 0, 0, 0.2);
 
 //Propiedades del objeto
 vec3 Ka = vec3(1.0, 0.0, 0.0);
@@ -83,26 +83,26 @@ vec3 shade()
 		float fs = pow(max(0.0, dot(R,V)), n);
 		cf += atenuation*lights[i].intensity * Ks * fs;
 	}
-	/*
+	
 	//Luz direccional
 	vec3 L = spotLight.position - Pp;
 	float distance = length(L);
-	//float atenuation = min(1 / (spotLight.constant + spotLight.linear * distance + spotLight.quadratic * distance * distance), 1);
+	float atenuation = min(1 / (spotLight.constant + spotLight.linear * distance + spotLight.quadratic * distance * distance), 1);
 	
 	L = normalize(L);
 	float theta = dot(spotLight.direction, -L);
 
 	if(theta > spotLight.cutoff)
 	{
-		cf += 1/*((theta - spotLight.cutoff) / ( 1 - spotLight.cutoff))  clamp(atenuation*spotLight.intensity*Kd*dot(N,L), 0.0, 1.0)*/;
-		/*//Especular
+		cf += ((theta - spotLight.cutoff) / ( 1 - spotLight.cutoff));  //*clamp(atenuation*spotLight.intensity*Kd*dot(N,L), 0.0, 1.0);
+		//Especular
 		vec3 V = normalize(-Pp);
 		vec3 R = reflect(-L, N);
 
 		float fs = pow(max(0.0, dot(R,V)), n);
 		cf += atenuation*spotLight.intensity * Ks * fs;
 		//cf = vec3(1, 0 , 0);
-	}*/
+	}
 
 	return cf;
 }
