@@ -21,7 +21,7 @@ void mouseMotionFunc(int x, int y);
 int main(int argc, char** argv)
 {
 	std::locale::global(std::locale("spanish"));// acentos ;)
-	if (!IGlib::init("../shaders_P2/shader.v5.vert", "../shaders_P2/shader.v5.frag"))
+	if (!IGlib::init("../shaders_P2/shader.v6.vert", "../shaders_P2/shader.v6.frag"))
 		return -1;
   //Se ajusta la cámara
 	//Si no se da valor se cojen valores por defecto
@@ -48,6 +48,7 @@ int main(int argc, char** argv)
 	IGlib::addColorTex(objId, "../img/color2.png");
 	IGlib::addSpecularTex(objId, "../img/specMap.png");
 	IGlib::addEmissiveTex(objId, "../img/emissive.png");
+	IGlib::addNormalTex(objId, "../img/normal.png");
 		
 	glm::mat4 modelMat = glm::mat4(1.0f);
 	IGlib::setModelMat(objId, modelMat);
