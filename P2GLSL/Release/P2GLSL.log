@@ -1,7 +1,7 @@
 ﻿  main.cpp
   Generando código
-  3 of 124 functions ( 2.4%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  56 of 138 functions (40.6%) were compiled, the rest were copied from previous compilation.
+    14 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada
-  P2GLSL.vcxproj -> C:\Users\joanv.COMPUTADORJOAN\Documents\Universidad\Master IGV\Universidad\G3D\Prácticas\Practica 2\P2_G3D\P2GLSL\Release\P2GLSL.exe
+  P2GLSL.vcxproj -> A:\Develop\Master\Graficos3D\P2\Grupo\P2_G3D\P2GLSL\Release\P2GLSL.exe
