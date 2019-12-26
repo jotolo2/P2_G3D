@@ -12,6 +12,9 @@
     <ClInclude Include="scr\BOX.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="scr\PYRAMID.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\main.cpp">

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\BOX.h" />
+    <ClInclude Include="scr\PYRAMID.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\main.cpp" />

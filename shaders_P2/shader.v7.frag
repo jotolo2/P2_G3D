@@ -75,16 +75,16 @@ mat3 TBN;
 //Propiedades del fog
 float fogStart = 0.1;
 float fogEnd = 10;
-float fogDensity =0.2;
-vec3 fogColor= vec3(0.5,0.2,0.2);
+float fogDensity = 0.2;
+vec3 fogColor = vec3(0.2, 0.2, 0.2);
 
 
 float fog()
 {
-	float fogFactor =0;
+	float fogFactor = 0;
 
 	//Lineal
-	fogFactor= (fogEnd-abs(Pp.z))/ (fogEnd - fogStart);
+	fogFactor = (fogEnd - abs(Pp.z)) / (fogEnd - fogStart);
 
 	//Exponencial
 	//fogFactor= 1/exp(abs(Pp.z) * fogDensity);
@@ -103,7 +103,6 @@ vec3 shade()
 	cf += Ke;
 
 	//Luces puntuales
-	
 	for (int i = 0; i < 2; i++)
 	{
 		vec3 L = lights[i].position - Pp;
@@ -126,7 +125,6 @@ vec3 shade()
 	
 	
 	//Luz focal
-	
 	vec3 L = spotLight.position - Pp;
 	float distance = length(L);
 	float atenuation = min(1 / (spotLight.constant + spotLight.linear * distance + spotLight.quadratic * distance * distance), 1);
@@ -178,7 +176,7 @@ void main()
 	Nv = (modelView * vec4(normalize(Nbump * TBN), 0.0)).xyz;
 	N = normalize(Nv);
 
-	vec3 cf= mix( fogColor,shade(), fog());
+	vec3 cf = mix(fogColor, shade(), fog());
 
 	outColor = vec4(cf, 1.0);   
 }
