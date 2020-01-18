@@ -1,4 +1,6 @@
 #version 330 core
+//OPTATIVO 2
+//IMPLEMENTACIÓN DE FOG
 
 in vec3 Np;
 in vec3 Tp;
@@ -58,18 +60,18 @@ struct DirectionalLight {
 DirectionalLight dirLight = DirectionalLight(vec3(0.6), vec3(-1, -1, -1), 1, 0, 0);
 
 //Propiedades del objeto
-vec3 Ka = vec3(1.0, 0.0, 0.0);
-vec3 Kd = vec3(1.0, 0.0, 0.0);
-vec3 Ks = vec3(1.0);
-vec3 Ke = vec3(0.0);
+vec3 Ka;
+vec3 Kd;
+vec3 Ks;
+vec3 Ke;
 float n = 100;
 
+//Variables para el bump mapping
 vec3 N;
 vec3 Nbump;
 vec3 Nv;
 vec3 B;
 vec3 T;
-
 mat3 TBN;
 
 //Propiedades del fog
@@ -78,16 +80,41 @@ float fogEnd = 10;
 float fogDensity = 0.2;
 vec3 fogColor = vec3(0.2, 0.2, 0.2);
 
+float fog();
+vec3 shade();
+
+void main()
+{
+	Ka = texture(colorTex, texCoord).rgb;
+	Kd = Ka;
+	Ks = texture(specularTex, texCoord).rgb;
+	Ke = texture(emiTex, texCoord).rgb;
+
+	//Calculo Bump Mapping
+	N = normalize(Np);
+	T = normalize(Tp);
+	B = normalize(cross(N, T));
+	TBN = transpose(mat3(T, B, N));
+
+	Nbump = ((texture(normalTex, texCoord).rgb) * 2 - 1);
+	Nv = (modelView * vec4(normalize(Nbump * TBN), 0.0)).xyz;
+	N = normalize(Nv);
+
+	//Calculo de niebla
+	vec3 cf = mix(fogColor, shade(), fog());
+
+	outColor = vec4(cf, 1.0);   
+}
 
 float fog()
 {
-	float fogFactor = 0;
+	float fogFactor;
 
 	//Lineal
 	fogFactor = (fogEnd - abs(Pp.z)) / (fogEnd - fogStart);
 
 	//Exponencial
-	//fogFactor= 1/exp(abs(Pp.z) * fogDensity);
+	//fogFactor = 1/exp(abs(Pp.z) * fogDensity);
 
 	return fogFactor;
 }
@@ -157,26 +184,4 @@ vec3 shade()
 	cf += spotLight.intensity * Ks * fs;
 
 	return cf;
-}
-
-
-void main()
-{
-	Ka = texture(colorTex, texCoord).rgb;
-	Kd = Ka;
-	Ks = texture(specularTex, texCoord).rgb;
-	Ke = texture(emiTex, texCoord).rgb;
-
-	N = normalize(Np);
-	T = normalize(Tp);
-	B = normalize(cross(N, T));
-	TBN = transpose(mat3(T, B, N));
-
-	Nbump = ((texture(normalTex, texCoord).rgb) * 2 - 1);
-	Nv = (modelView * vec4(normalize(Nbump * TBN), 0.0)).xyz;
-	N = normalize(Nv);
-
-	vec3 cf = mix(fogColor, shade(), fog());
-
-	outColor = vec4(cf, 1.0);   
 }

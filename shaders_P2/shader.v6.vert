@@ -18,8 +18,6 @@ out vec2 texCoord;
 
 void main()
 {
-	//Np = (normal * vec4(inNormal, 0.0)).xyz;
-	//Tp = (normal * vec4(inTangent, 0.0)).xyz;
 	Np = inNormal;
 	Tp = inTangent;
 	Pp = (modelView * vec4(inPos, 1.0)).xyz;

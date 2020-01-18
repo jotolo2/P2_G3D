@@ -1,4 +1,7 @@
 #version 330 core
+//OBLIGATORIO 1 Y 2
+//ILUMINACIÓN CON DOS LUCES PUNTUALES
+//ATENUACIÓN CON LA DISTANCIA
 
 in vec3 Np;
 in vec3 Pp;
@@ -24,18 +27,31 @@ struct Light {
     float quadratic;
 };
 
+//Una luz roja a la derecha y una luz verde más cerca a la izquierda
 Light lights[] = Light[](
-			Light(vec3(1.0, 1.0, 1.0), vec3(10, 0, 0), 1, 0.09, 0.032),
-			Light(vec3(0.0, 1.0, 0.0), vec3(-2, 0, 0), 1, 0.09, 0.032))
-			;
+			Light(vec3(1.0, 0.0, 0.0), vec3(10, 0, 0), 1, 0.09, 0.032),
+			Light(vec3(0.0, 1.0, 0.0), vec3(-2, 0, 0), 1, 0.09, 0.032)
+			);
 
 //Propiedades del objeto
-vec3 Ka = vec3(1.0, 0.0, 0.0);
-vec3 Kd = vec3(1.0, 0.0, 0.0);
-vec3 Ks = vec3(1.0);
-vec3 Ke = vec3(0.0);
+vec3 Ka;
+vec3 Kd;
+vec3 Ks;
+vec3 Ke;
 float n = 100;
 vec3 N;
+
+vec3 shade();
+
+void main()
+{
+	Ka = texture(colorTex, texCoord).rgb;
+	Kd = Ka;
+	Ks = texture(specularTex, texCoord).rgb;
+	Ke = texture(emiTex, texCoord).rgb;
+	N = normalize(Np);
+	outColor = vec4(shade(), 1.0);   
+}
 
 vec3 shade()
 {
@@ -60,8 +76,6 @@ vec3 shade()
 		float fs = pow(max(0.0, dot(R,V)), n);
 		cf += atenuation*lights[i].intensity * Ks * fs;
 
-		//cf *= atenuation;
-
 		cf += Ke;
 	}
 
@@ -69,15 +83,4 @@ vec3 shade()
 	cf += Ia*Ka;
 
 	return cf;
-}
-
-
-void main()
-{
-	Ka = texture(colorTex, texCoord).rgb;
-	Kd = Ka;
-	Ks = texture(specularTex, texCoord).rgb;
-	Ke = texture(emiTex, texCoord).rgb;
-	N = normalize(Np);
-	outColor = vec4(shade(), 1.0);   
 }

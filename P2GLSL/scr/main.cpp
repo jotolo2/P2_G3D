@@ -33,27 +33,28 @@ int main(int argc, char** argv)
 	view = glm::lookAt(cameraPos, cameraPos + cameraForward, cameraUp);
 	IGlib::setViewMat(view);
 
-
+	//Matriz de proyección
 	glm::mat4 proj = glm::mat4(1.0);
 	float f = 1.0f / tan(3.141592f / 6.0f);
 	float far = 10.0f;
 	float near = 0.1f;
-
 	proj[0].x = f;
 	proj[1].y = f;
-	proj[2].z = (far + near) / (near - far);
+	proj[2].z = -(far + near) / (far - near);
+	proj[3].z = (-2.0f * far * near) / (far - near);
 	proj[2].w = -1.0f;
-	proj[3].z = (2.0f * far * near) / (near - far);
-	proj[3].w = 0.0f;
 	IGlib::setProjMat(proj);
 
-	//Creamos el objeto que vamos a visualizar
+	//OPTATIVO 3
+	//Creamos el nuevo objeto que vamos a visualizar con la tangente
+	/*
 	Pyramid pyramid = Pyramid();
 	objId = IGlib::createObj(pyramid.nTriangleIndex, pyramid.nVertex, pyramid.triangleIndex,
 		pyramid.vertexPos, pyramid.vertexColor, pyramid.vertexNormal, pyramid.vertexTexCoord, pyramid.vertexTangent);
 
-	/*objId = IGlib::createObj(cubeNTriangleIndex, cubeNVertex, cubeTriangleIndex,
-		cubeVertexPos, cubeVertexColor, cubeVertexNormal, cubeVertexTexCoord, cubeVertexTangent);*/
+		*/
+	objId = IGlib::createObj(cubeNTriangleIndex, cubeNVertex, cubeTriangleIndex,
+		cubeVertexPos, cubeVertexColor, cubeVertexNormal, cubeVertexTexCoord, cubeVertexTangent);
 
 	IGlib::addColorTex(objId, "../img/color2.png");
 	IGlib::addSpecularTex(objId, "../img/specMap.png");
@@ -79,6 +80,18 @@ int main(int argc, char** argv)
 void resizeFunc(int width, int height)
 {
 	//Ajusta el aspect ratio al tamaño de la venta
+	glm::mat4 proj = glm::mat4(0.0f);
+	float aspectRatio = float(width) / float(height);
+	float near = 0.1f;
+	float far = 10.0f;
+	float fov = 30.0f;
+	proj[0].x = 1.0f / (tan(glm::radians(fov)) * aspectRatio);
+	proj[1].y = 1.0f / tan(glm::radians(fov));
+	proj[2].z = -(far + near) / (far - near);
+	proj[3].z = (-2.0f * far * near) / (far - near);
+	proj[2].w = -1.0f;
+
+	IGlib::setProjMat(proj);
 }
 
 void idleFunc()
@@ -95,6 +108,7 @@ void idleFunc()
 void keyboardFunc(unsigned char key, int x, int y)
 {
 	//std::cout << "Se ha pulsado la tecla " << key << std::endl << std::endl;
+	//Control de la posición de la cámara por teclado
 	glm::vec3 left;
 	glm::vec4 result;
 	glm::mat4 rotation;
